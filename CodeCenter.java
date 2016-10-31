@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* REMEMBERTODO IN THIS CLASS
 call machine.crash() whenever a line is read that has a mistake in it
 all machine.crash calls need to be moved to the respective functions after debugging to maintain authenticity
@@ -89,207 +83,238 @@ public class CodeCenter extends JFrame {
         //Initialize IntriguedMachine object
         IntriguedMachine machine = new IntriguedMachine();
         String[] userCodeArray = getTextasArray();
-        
         //Parse each line
-        for(int i = 0; i<userCodeArray.length; i++){
-            if(machine.isCrashed() == false ) {
-                //Split off command name;
-                String[] attributes = userCodeArray[i].split(" ");
-                String command = attributes[0];
-                //Handle each command
-
-                switch (command){
-                    //"#" will serve as comment symbol
-                    case "#":
-                        break;
-
-                    case "ADD":
-                        int num;
-                        try {
-                            num = Integer.parseInt(attributes[1]);
-                            machine.ADD(num);
-                            break;
-                        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                            machine.crash(i+1, userCodeArray[i]);
-                            break;
-                        }
-
-                    case "BOOL":
-                       //Split parts of functions into seperate strings for easy handling
-                       String[] properties = userCodeArray[i].split(" ");
-                       //Necessary variables for calling BOOL() function 
-                       int fromBoxNum;
-                       int toBoxNum;
-                       int index;
-
-                       //Will hold the return value of BOOL to determine if next line should be run
-                       boolean BOOL_Answer;
-                       //Check for inappropriate input
-                       try {
-                           fromBoxNum = Integer.parseInt(properties[1]);
-                       } catch(NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                           machine.crash(i+1, userCodeArray[i]);
-                           fromBoxNum = 0;
-                       }
-
-                       //Check for inappropriate input
-                       try {
-                           toBoxNum = Integer.parseInt(properties[2]);
-                       } catch(NumberFormatException | ArrayIndexOutOfBoundsException f) {
-                           machine.crash(i+1, userCodeArray[i]);
-                           toBoxNum = 0;
-                       }
-
-                       //Check for inappropriate input
-                       try {
-                           index = Integer.parseInt(properties[3]);
-                       } catch(ArrayIndexOutOfBoundsException e) {
-                           //No machine crash because index doesn't always need to be specified
-                           //crash() will be called in specific cases for energy values that require an index
-                           index = 0;
-                       } catch(NumberFormatException f) {
-                           machine.crash(i+1, userCodeArray[i]);
-                           break;
-                       }
-
-                       BOOL_Answer = machine.BOOL(fromBoxNum, toBoxNum, index);
-                       if(BOOL_Answer == false) {
-                           i++; //Skip the next line if BOOL() returns false
-                       }//End of if statement
-                       break;
-
-                    case "CLEAR":
-                        machine.CLEAR();
-                       
-                    case "CLEARPLACE":
-                        String[] propertiesArray = userCodeArray[i].split(" ");
-                         if(propertiesArray.length == 3) {
-                             int x_spot = Integer.parseInt(propertiesArray[1]); //These will represent x_pos and y_pos
-                             int y_spot = Integer.parseInt(propertiesArray[2]); //In the CLEARPLACE method
-                             
-                             machine.CLEARPLACE(x_spot, y_spot);
-                             break;
-                         } else {
-                             machine.crash(i+1, userCodeArray[i]);
-                             break;
-                         }//End of if statement
-                        
-                        
-                    case "MOVE":
-                            
-                        int frmBoxNum;
-                        
-                        try {                        
-                              frmBoxNum = Integer.parseInt(attributes[1]);      
-
-                            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                            
-                            machine.crash(i+1, userCodeArray[i]);
-                            frmBoxNum = 0;
-                            break;
-                        } //end of try-catch
-
-                            int tBoxNum;
-                            try {
-                                tBoxNum = Integer.parseInt(attributes[2]);
-                            } catch(NumberFormatException | ArrayIndexOutOfBoundsException f) {
-                                machine.crash(i+1, userCodeArray[i]);
-                                
-                                break;
-                            }
-                            machine.MOVE(frmBoxNum, tBoxNum);
-                            break;
-
-                    case "OPERATE":
-                       //Necessary variables for calling BOOL() function 
-                       int fromBxNum;
-                       int toBxNum;
-                       int x; //These three will do different things depending
-                       int y; //on the ebergy level of the OPERATE box
-                       int z;
-
-                       //Check for inappropriate input
-                       try {
-                           fromBxNum = Integer.parseInt(attributes[1]);
-                       } catch(NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                           machine.crash(i+1, userCodeArray[i]);
-                           fromBxNum = 0;
-                       }
-
-                       //Check for inappropriate input
-                       try {
-                           toBxNum = Integer.parseInt(attributes[2]);
-                       } catch(NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                           machine.crash(i+1, userCodeArray[i]);
-                           toBxNum = 0;
-                       }
-
-
-                       //Check for inappropriate input
-                       try {
-                           x = Integer.parseInt(attributes[3]);
-                       } catch(NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                           //No crash because some OPERATE functions require this property
-                           x = 0;
-                       }
-                       
-                       try {
-                           y = Integer.parseInt(attributes[4]);
-                       } catch(NumberFormatException | java.lang.ArrayIndexOutOfBoundsException f) {
-                           //No crash because some OPERATE functions require this property
-                           y = 0;
-                       }
-
-                      //Check for inappropriate input
-                       try {
-                           z = Integer.parseInt(attributes[5]);
-                       } catch(NumberFormatException | java.lang.ArrayIndexOutOfBoundsException g) {
-                           //No crash because some OPERATE functions require this property
-                           z = 0;
-                       }
-                       
-                       machine.OPERATE(fromBxNum, toBxNum, x, y, z);
-                       break;
-                       
-                    case "PRINT":
-                        if(attributes.length != 1) {
-                            machine.crash(i+1, userCodeArray[i]);
-                        } else {
-                            machine.PRINT();
-                            break;
-                        }
-                        
-                    case "SET":
-                         if(attributes.length == 3) {
-                             int x_; //Apparently variables must be declared
-                             int y_;// outside of try-catch
-                        	 
-                        	 try {
-                            	 x_ = Integer.parseInt(attributes[1]); //These will represent x_pos and y_pos
-                            	 y_ = Integer.parseInt(attributes[2]); //In the CLEARPLACE method
-                             } catch(NumberFormatException l) {
-                            	 machine.crash(i+1, userCodeArray[i]);
-                            	 x_ = 0;// For compiler
-                            	 y_ = 0;
-                             }
-                            	 
-                             machine.SET(x_, y_);
-                             break;
-                         } else {
-                             machine.crash(i+1, userCodeArray[i]);
-                             break;
-                         }//End of if statement
-                        
-                    default:
-                        System.out.println("Hit default!");
-                        System.out.println("Current String to be parsed: " + userCodeArray[i]);
-                        machine.crash(i+1, userCodeArray[i]);
-                }
-            } else {
-             break;
-            }//End of if statement that encapsulates all command handling and checks for crashes
-        }
-    }                                        
+        new Thread() {
+        	    	public void run() {
+        	    		int extratime = 0;
+		    
+	    	    		for(int i = 0; i<userCodeArray.length; i++){
+				            if(machine.isCrashed() == false ) {
+				            	//Split off command name;
+				                String[] attributes = userCodeArray[i].split(" ");
+				                String command = attributes[0];
+				                //Handle each command
+				
+				                switch (command){
+				                    //"#" will serve as comment symbol
+				                    case "#":
+				                        break;
+				
+				                    case "ADD":
+				                        int num;
+				                        try {
+				                            num = Integer.parseInt(attributes[1]);
+				                            machine.ADD(num);
+				                            break;
+				                        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+				                            machine.crash(i+1, userCodeArray[i]);
+				                            break;
+				                        }
+				
+				                    case "BOOL":
+				                       //Split parts of functions into seperate strings for easy handling
+				                       String[] properties = userCodeArray[i].split(" ");
+				                       //Necessary variables for calling BOOL() function 
+				                       int fromBoxNum;
+				                       int toBoxNum;
+				                       int index;
+				
+				                       //Will hold the return value of BOOL to determine if next line should be run
+				                       boolean BOOL_Answer;
+				                       //Check for inappropriate input
+				                       try {
+				                           fromBoxNum = Integer.parseInt(properties[1]);
+				                       } catch(NumberFormatException | ArrayIndexOutOfBoundsException e) {
+				                           machine.crash(i+1, userCodeArray[i]);
+				                           fromBoxNum = 0;
+				                       }
+				
+				                       //Check for inappropriate input
+				                       try {
+				                           toBoxNum = Integer.parseInt(properties[2]);
+				                       } catch(NumberFormatException | ArrayIndexOutOfBoundsException f) {
+				                           machine.crash(i+1, userCodeArray[i]);
+				                           toBoxNum = 0;
+				                       }
+				
+				                       //Check for inappropriate input
+				                       try {
+				                           index = Integer.parseInt(properties[3]);
+				                       } catch(ArrayIndexOutOfBoundsException e) {
+				                           //No machine crash because index doesn't always need to be specified
+				                           //crash() will be called in specific cases for energy values that require an index
+				                           index = 0;
+				                       } catch(NumberFormatException f) {
+				                           machine.crash(i+1, userCodeArray[i]);
+				                           break;
+				                       }
+				
+				                       BOOL_Answer = machine.BOOL(fromBoxNum, toBoxNum, index);
+				                       if(BOOL_Answer == false) {
+				                           i++; //Skip the next line if BOOL() returns false
+				                       }//End of if statement
+				                       break;
+				
+				                    case "CLEAR":
+				                        machine.CLEAR();
+				                       
+				                    case "CLEARPLACE":
+				                        String[] propertiesArray = userCodeArray[i].split(" ");
+				                         if(propertiesArray.length == 3) {
+				                             int x_spot = Integer.parseInt(propertiesArray[1]); //These will represent x_pos and y_pos
+				                             int y_spot = Integer.parseInt(propertiesArray[2]); //In the CLEARPLACE method
+				                             
+				                             machine.CLEARPLACE(x_spot, y_spot);
+				                             break;
+				                         } else {
+				                             machine.crash(i+1, userCodeArray[i]);
+				                             break;
+				                         }//End of if statement
+				                        
+				                        
+				                    case "MOVE":
+				                            
+				                        int frmBoxNum;
+				                        
+				                        try {                        
+				                              frmBoxNum = Integer.parseInt(attributes[1]);      
+				
+				                            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+				                            System.out.println("MOVE failed: parse error");
+				                            machine.crash(i+1, userCodeArray[i]);
+				                            frmBoxNum = 0;
+				                            break;
+				                        } //end of try-catch
+				
+				                            int tBoxNum;
+				                            try {
+				                                tBoxNum = Integer.parseInt(attributes[2]);
+				                            } catch(NumberFormatException | ArrayIndexOutOfBoundsException f) {
+				                                System.out.println("MOVE failed: number or array error");
+				                            	machine.crash(i+1, userCodeArray[i]);
+				                                
+				                                break;
+				                            }
+				                            boolean status = machine.MOVE(frmBoxNum, tBoxNum);
+				                            if(!status) machine.crash(i+1, userCodeArray[i]);
+				                            break;
+				
+				                    case "OPERATE":
+				                       //Necessary variables for calling BOOL() function 
+				                       int fromBxNum;
+				                       int toBxNum;
+				                       int x; //These three will do different things depending
+				                       int y; //on the ebergy level of the OPERATE box
+				                       int z;
+				
+				                       //Check for inappropriate input
+				                       try {
+				                           fromBxNum = Integer.parseInt(attributes[1]);
+				                       } catch(NumberFormatException | ArrayIndexOutOfBoundsException e) {
+				                           machine.crash(i+1, userCodeArray[i]);
+				                           fromBxNum = 0;
+				                       }
+				
+				                       //Check for inappropriate input
+				                       try {
+				                           toBxNum = Integer.parseInt(attributes[2]);
+				                       } catch(NumberFormatException | ArrayIndexOutOfBoundsException e) {
+				                           machine.crash(i+1, userCodeArray[i]);
+				                           toBxNum = 0;
+				                       }
+				
+				
+				                       //Check for inappropriate input
+				                       try {
+				                           x = Integer.parseInt(attributes[3]);
+				                       } catch(NumberFormatException | ArrayIndexOutOfBoundsException e) {
+				                           //No crash because some OPERATE functions require this property
+				                           x = 0;
+				                       }
+				                       
+				                       try {
+				                           y = Integer.parseInt(attributes[4]);
+				                       } catch(NumberFormatException | java.lang.ArrayIndexOutOfBoundsException f) {
+				                           //No crash because some OPERATE functions require this property
+				                           y = 0;
+				                       }
+				
+				                      //Check for inappropriate input
+				                       try {
+				                           z = Integer.parseInt(attributes[5]);
+				                       } catch(NumberFormatException | java.lang.ArrayIndexOutOfBoundsException g) {
+				                           //No crash because some OPERATE functions require this property
+				                           z = 0;
+				                       }
+				                       
+				                       machine.OPERATE(fromBxNum, toBxNum, x, y, z);
+				                       break;
+				                       
+				                    case "PRINT":
+				                        if(attributes.length != 1) {
+				                            machine.crash(i+1, userCodeArray[i]);
+				                        } else {
+				                            machine.PRINT();
+				                            break;
+				                        }
+				                        
+				                    case "SET":
+				                         if(attributes.length == 3) {
+				                             int x_; //Apparently variables must be declared
+				                             int y_;// outside of try-catch
+				                        	 
+				                        	 try {
+				                            	 x_ = Integer.parseInt(attributes[1]); //These will represent x_pos and y_pos
+				                            	 y_ = Integer.parseInt(attributes[2]); //In the CLEARPLACE method
+				                             } catch(NumberFormatException l) {
+				                            	 machine.crash(i+1, userCodeArray[i]);
+				                            	 x_ = 0;// For compiler
+				                            	 y_ = 0;
+				                             }
+				                            	 
+				                             machine.SET(x_, y_);
+				                             break;
+				                         } else {
+				                             machine.crash(i+1, userCodeArray[i]);
+				                             break;
+				                         }//End of if statement
+				                        
+				                    case "TIME":
+				                        if(attributes.length != 2) {
+				                        	System.out.println("attributes list too long in TIME");
+				                            machine.crash(i+1, userCodeArray[i]);
+				                        } else {
+				                        	try {
+				                            extratime = Integer.parseInt(attributes[1]);
+				                        	} catch(NumberFormatException n)	{
+				                        		System.out.println("Error with number format in TIME");
+				                        		machine.crash(i+1, userCodeArray[i]);
+				                        	}
+				                            break;
+				                        }
+				                         
+				                    default:
+				                        System.out.println("Hit default!");
+				                        System.out.println("Current String to be parsed: " + userCodeArray[i]);
+				                        machine.crash(i+1, userCodeArray[i]);
+				                }
+				            } else {
+				            	break;
+				            }//End of if statement that encapsulates all command handling and checks for crashes
+        	    		
+	        	    		try {
+	        	    			System.out.println("sleep starting");
+								sleep(100 + extratime);
+								System.out.println("Sleep finished");
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+        	    		}
+        	    	} //end of run() method
+        	    	}.start(); //end of inner Thread class
+    }                          
+    
 
     //Sets up Intrigued machine and the codecenter
     public static void main(String args[]) {
