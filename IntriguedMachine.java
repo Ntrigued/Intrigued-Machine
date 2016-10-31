@@ -1,11 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* REMEMBERTODO IN THIS CLASS
-
 */
 package theintriguedproject;
 
@@ -76,9 +69,9 @@ public class IntriguedMachine {
     
     public boolean BOOL(int fromBox, int toBox, int index) {
         int controlBoxEnergy = boxMatrix[0][0];
-        int fromBox_x = (fromBox / 10) - (fromBox % 10);
+        int fromBox_x = (fromBox - (fromBox % 10))/10;
         int fromBox_y = fromBox % 10;
-        int toBox_x = (toBox/10) - (toBox % 10);
+        int toBox_x = (toBox/10 - (toBox % 10))/10;
         int toBox_y = toBox % 10;
         
         
@@ -125,7 +118,7 @@ public class IntriguedMachine {
     }
     
     //Moves 1 energy from fromBox to toBox, if they are touching and fromBox has 1 energy
-    public boolean MOVE( int fromBox, int toBox) {
+    public boolean MOVE(int fromBox, int toBox) {
         //variables for altering values in boxMatrix
         int fromBox_x = (fromBox - (fromBox % 10))/10;
         int fromBox_y = fromBox % 10;
@@ -133,9 +126,10 @@ public class IntriguedMachine {
         int toBox_y = toBox % 10;
         
         if(boxMatrix[fromBox_x - 1][fromBox_y - 1] > 0) {
-            if(toBox-fromBox==1) {
+            if((toBox-fromBox)*(toBox-fromBox)==1) {
                 boxMatrix[fromBox_x-1][fromBox_y-1] = boxMatrix[fromBox_x-1][fromBox_y-1] - 1;
                 boxMatrix[toBox_x-1][toBox_y-1] = boxMatrix[toBox_x-1][toBox_y-1] + 1;
+                
                 return true;
             
             } else if ((fromBox%10) - (toBox%10) == 0) {
@@ -144,9 +138,11 @@ public class IntriguedMachine {
                 return true;
             
             } else {
+            	System.out.println("MOVE failed: boxes not adjacent");
                 return false;
             }
         } else {
+        	System.out.println("MOVE failed: energy in fromBOx less than 1");
             return false;
         }     
     } //End of MOVE method
@@ -226,19 +222,16 @@ public class IntriguedMachine {
     
     //STILL NEEDS TO BE IMPLEMENTED
     public boolean PRINT(){  
-    	try {
-    		timer.wait(10000000);
-    	} catch(Exception adf) {}
     	String result = ""; //Used to hold the characters to be printed to the screen
         for(int x = 0; x<50; x++){
            for(int y = 0; y<50; y++) {
                result = result + String.valueOf(output.outputLines[x][y]); 
            }//End of inner IF statement
 
-           result = result + "a\n";
-           output.jTextArea1.setText(result);           
+           result = result + "\n";         
         }//End of outer IF statement
         
+        output.jTextArea1.setText(result);  
         return true;
     }
     
