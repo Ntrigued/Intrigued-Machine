@@ -4,9 +4,7 @@ package theintriguedproject;
 erase main method if it isn't necessary
 */
 
-import javax.swing.JFrame;
-import java.util.logging.Logger;
-import java.lang.*;
+import javax.swing.JFrame;;
 
 //Implements the output window where are all PRINTTO, READ, etc. commands are output
 //screen is represented by a two-dimensional char array, each dimension containiing 50 elements which are initially set to the space character
@@ -58,9 +56,6 @@ public class OutputWindow extends JFrame {
         pack();
     // </editor-fold>                        
 
-   /* //Sets up Intrigued machine and the codecenter
-    public static void main(String args[]) {
-        
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -84,13 +79,6 @@ public class OutputWindow extends JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form *e/
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-              //This does nothing  new OutputWindow().setVisible(true);
-            }
-        });
-    }*/
     }    
     //Create two-dimensional char array to represent the output screen
     char[][] outputLines = new char[50][50];
