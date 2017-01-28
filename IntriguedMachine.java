@@ -49,21 +49,28 @@ public class IntriguedMachine {
     //If the energy container has at least one energy remaining, take one energy and send it to borderBox
     public boolean ADD(int borderBox) {
         int borderBox_x = (borderBox - (borderBox%10))/10;
-        int borderBox_y = borderBox%10;
+        int borderBox_y = borderBox % 10;
+        
+        System.out.println("borderBox: " + borderBox);
+        System.out.println("borderBox_x: " + borderBox_x);
+        System.out.println("borderBox_y: " + borderBox_y);
+        System.out.println("energyContainer: " + energyContainer);
         
         if(energyContainer>0) {
+        	System.out.println("energyContainer barrier has been passed: " + energyContainer);
            if(borderBox_x == 1 || borderBox_x == 6) {
                energyContainer = energyContainer - 1;
                boxMatrix[borderBox_x-1][borderBox_y-1] = boxMatrix[borderBox_x-1][borderBox_y-1] + 1;
                return true;
 
            } else if(borderBox_y == 1 || borderBox_y == 6) {
-               energyContainer = energyContainer - 1;
-               boxMatrix[borderBox_x][borderBox_y] = boxMatrix[borderBox_x-1][borderBox_y-1] + 1;
+        	   energyContainer = energyContainer - 1;
+               boxMatrix[borderBox_x - 1][borderBox_y - 1] = boxMatrix[borderBox_x-1][borderBox_y-1] + 1;
                return true;
 
            } 
         }//End of if statements
+        System.out.println("ADD failed");
         return false;
     } //end of ADD method
     
@@ -71,7 +78,7 @@ public class IntriguedMachine {
         int controlBoxEnergy = boxMatrix[0][0];
         int fromBox_x = (fromBox - (fromBox % 10))/10;
         int fromBox_y = fromBox % 10;
-        int toBox_x = (toBox/10 - (toBox % 10))/10;
+        int toBox_x = (toBox - (toBox % 10))/10;
         int toBox_y = toBox % 10;
         
         
@@ -128,7 +135,7 @@ public class IntriguedMachine {
         if(boxMatrix[fromBox_x - 1][fromBox_y - 1] > 0) {
             if((toBox-fromBox)*(toBox-fromBox)==1) {
                 boxMatrix[fromBox_x-1][fromBox_y-1] = boxMatrix[fromBox_x-1][fromBox_y-1] - 1;
-                boxMatrix[toBox_x-1][toBox_y-1] = boxMatrix[toBox_x-1][toBox_y-1] + 1;
+                boxMatrix[toBox_x-1][toBox_y-1] += 1;
                 
                 return true;
             
@@ -153,15 +160,16 @@ public class IntriguedMachine {
         int fromBox_y = fromBox % 10;
         int toBox_x = (toBox - (toBox % 10))/10;
         int toBox_y = toBox % 10;
-        int controlBoxEnergy = boxMatrix[0][0];
+        int controlBoxEnergy = getOperateBoxEnergyValue();
         
         switch(controlBoxEnergy) {
-            
+
             case 3:
-                int fromBox_Energy = boxMatrix[fromBox_x][fromBox_y];
-                int toBox_Energy = boxMatrix[toBox_x][toBox_y];
-                boxMatrix[toBox_x][toBox_y] = boxMatrix[toBox_x][toBox_y] + fromBox_Energy;
-                boxMatrix[fromBox_x][fromBox_y] = 0;
+            //moves all of energy from fromBox to toBox
+            	int fromBox_Energy = boxMatrix[fromBox_x - 1][fromBox_y - 1];
+                int toBox_Energy = boxMatrix[toBox_x - 1][toBox_y - 1];
+                boxMatrix[toBox_x - 1][toBox_y - 1] = boxMatrix[toBox_x - 1][toBox_y - 1] + fromBox_Energy;
+                boxMatrix[fromBox_x - 1][fromBox_y - 1] = 0;
                 return true;
                 
             //Has two indices
@@ -172,28 +180,28 @@ public class IntriguedMachine {
                 if(index==1) {
                     int fromBoxEnergy = boxMatrix[fromBox_x -1][fromBox_y -1];
                     int fromBoxEnergy_Hundreds = (fromBoxEnergy - (fromBoxEnergy % 100))/100;
-                    int fromBoxEnergy_Tens = (fromBoxEnergy - (fromBoxEnergy%10))/10;
-                    int fromBoxEnergy_Ones = fromBoxEnergy%10;
+                    int fromBoxEnergy_Tens = (fromBoxEnergy - (fromBoxEnergy % 10))/10;
+                    int fromBoxEnergy_Ones = fromBoxEnergy % 10;
                     
                     if (fromBoxEnergy_Hundreds != 0) {
-                        output.outputLines[x_pos-1][y_pos-1] = output.codeList(fromBoxEnergy_Hundreds);
-                        output.outputLines[x_pos-2][y_pos-2] = output.codeList(fromBoxEnergy_Tens);
-                        output.outputLines[x_pos-3][y_pos-3] = output.codeList(fromBoxEnergy_Ones);
+                        output.outputLines[x_pos - 1][y_pos-1] = output.codeList(fromBoxEnergy_Hundreds);
+                        output.outputLines[x_pos - 1][y_pos] = output.codeList(fromBoxEnergy_Tens);
+                        output.outputLines[x_pos - 1][y_pos + 1] = output.codeList(fromBoxEnergy_Ones);
                         
                         PRINT();
                         
-                        output.outputLines[x_pos-1][y_pos-1] = ' ';
-                        output.outputLines[x_pos-2][y_pos-2] = ' ';
-                        output.outputLines[x_pos-3][y_pos-3] = ' ';
+                        output.outputLines[x_pos - 1][y_pos - 1] = ' ';
+                        output.outputLines[x_pos - 1][y_pos] = ' ';
+                        output.outputLines[x_pos - 1][y_pos + 1] = ' ';
                         
                     } else if(fromBoxEnergy_Tens != 0) {
-                        output.outputLines[x_pos-1][y_pos-1] = output.codeList(fromBoxEnergy_Tens);
-                        output.outputLines[x_pos-2][y_pos-2] = output.codeList(fromBoxEnergy_Ones);
+                        output.outputLines[x_pos - 1][y_pos - 1] = output.codeList(fromBoxEnergy_Tens);
+                        output.outputLines[x_pos - 1][y_pos] = output.codeList(fromBoxEnergy_Ones);
                         
                         PRINT();
                         
-                        output.outputLines[x_pos-1][y_pos-1] = ' ';
-                        output.outputLines[x_pos-2][y_pos-2] = ' ';
+                        output.outputLines[x_pos - 1][y_pos-1] = ' ';
+                        output.outputLines[x_pos - 1][y_pos] = ' ';
                     
                     } else {
                         output.outputLines[x_pos-1][y_pos-1] = output.codeList(fromBoxEnergy_Ones);
@@ -205,10 +213,10 @@ public class IntriguedMachine {
                     }//End of inner if statement
                     return true;
                 } else if(index==2) {
-                    int fromBoxEnergy = boxMatrix[fromBox_x][fromBox_y];
-                    int toBoxEnergy = boxMatrix[toBox_x][toBox_y];
-                    boxMatrix[fromBox_x][fromBox_y] = toBoxEnergy;
-                    boxMatrix[toBox_x][toBox_y] = fromBoxEnergy;
+                    int fromBoxEnergy = boxMatrix[fromBox_x - 1][fromBox_y - 1];
+                    int toBoxEnergy = boxMatrix[toBox_x - 1][toBox_y - 1];
+                    boxMatrix[fromBox_x - 1][fromBox_y - 1] = toBoxEnergy;
+                    boxMatrix[toBox_x - 1][toBox_y - 1] = fromBoxEnergy;
                     
                     return true;
                 } else{
@@ -246,7 +254,7 @@ public class IntriguedMachine {
             char charID = output.codeList(boxMatrix[5][5]);
             System.out.println("x: " + x_pos);
             System.out.println("y: " + y_pos);
-            output.outputLines[x_pos][y_pos] = charID;
+            output.outputLines[x_pos - 1][y_pos - 1] = charID;
             System.out.println(output.outputLines[x_pos][y_pos]);
             return true;
         }//End of if statement
