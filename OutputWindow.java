@@ -1,5 +1,7 @@
 package theintriguedproject;
 
+import java.awt.Font;
+
 /* REMEMBERTODO
 erase main method if it isn't necessary
 */
@@ -29,8 +31,9 @@ public class OutputWindow extends JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
+//        jTextArea1.setColumns(5);
+ //       jTextArea1.setRows(5);
+        jTextArea1.setFont(new Font("monospaced", Font.PLAIN, 12));
         jScrollPane1.setViewportView(jTextArea1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
