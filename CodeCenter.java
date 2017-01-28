@@ -90,6 +90,7 @@ public class CodeCenter extends JFrame {
 		    
 	    	    		for(int i = 0; i<userCodeArray.length; i++){
 				            if(machine.isCrashed() == false ) {
+				            	System.out.println("line to be parsed: " + userCodeArray[i]);
 				            	//Split off command name;
 				                String[] attributes = userCodeArray[i].split(" ");
 				                String command = attributes[0];
@@ -104,12 +105,16 @@ public class CodeCenter extends JFrame {
 				                        int num;
 				                        try {
 				                            num = Integer.parseInt(attributes[1]);
-				                            machine.ADD(num);
-				                            break;
+				                            boolean response = machine.ADD(num);
+				                            if(!response) 
+				                            {
+				                            	machine.crash(i+1,userCodeArray[i]);
+				                            }
+				                            
 				                        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-				                            machine.crash(i+1, userCodeArray[i]);
-				                            break;
+				                        	machine.crash(i+1, userCodeArray[i] + ": " + e);
 				                        }
+				                        break;
 				
 				                    case "BOOL":
 				                       //Split parts of functions into seperate strings for easy handling
@@ -204,7 +209,7 @@ public class CodeCenter extends JFrame {
 				                       int fromBxNum;
 				                       int toBxNum;
 				                       int x; //These three will do different things depending
-				                       int y; //on the ebergy level of the OPERATE box
+				                       int y; //on the energy level of the OPERATE box
 				                       int z;
 				
 				                       //Check for inappropriate input
@@ -307,7 +312,6 @@ public class CodeCenter extends JFrame {
 								sleep(100 + extratime);
 								System.out.println("Sleep finished");
 							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
         	    		}
