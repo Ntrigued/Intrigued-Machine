@@ -9,4 +9,4 @@ Some commands will do different things depending on how much energy is currently
 
 In it's first release, the Intrigued Machine will not be able to deal with input while running. Instead, programs will have to be coded that can handle different "initial inputs;" changeable values that you will set at the beginnings of programs by altering the code in simple ways. For instance, a program that finds the integer square root of a number may have code that loops through ADD, OPERATE, and BOOL statements a number of times to set the ones, tens, and hundreds place in three boxes.  
 
-Future implementations will likely include the ability to handle simple user input into a text box below the Intrigued Machine's screen. I also plan on implementing the ability to save and load .intrig files so that programs can be stored easily from the editor.
+Future implementations will likely include the ability to handle simple user input into a text box below the Intrigued Machine's screen. I also plan on implementing the ability to save and load .intr files so that programs can be stored easily from the editor.
