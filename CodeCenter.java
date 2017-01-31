@@ -1,8 +1,7 @@
 /* REMEMBERTODO IN THIS CLASS
 call machine.crash() whenever a line is read that has a mistake in it
 all machine.crash calls need to be moved to the respective functions after debugging to maintain authenticity
-Implement machine.crash() for incorrect PRINT syntax - will not creash if extra words are added to end of line
-Extra arrays have probably been created that are unmecessary because the attributes[] array is created at teh beginning of parsing each line
+Implement machine.crash() for incorrect PRINT tributes[] array is created at the beginning of parsing each line
 */
 package theintriguedproject;
 
@@ -92,7 +91,7 @@ public class CodeCenter extends JFrame {
 				            if(machine.isCrashed() == false ) {
 				            	System.out.println("line to be parsed: " + userCodeArray[i]);
 				            	//Split off command name;
-				                String[] attributes = userCodeArray[i].split(" ");
+				                String[] attributes = userCodeArray[i].trim().split(" ");
 				                String command = attributes[0];
 				                //Handle each command
 				
@@ -154,15 +153,15 @@ public class CodeCenter extends JFrame {
 				                           break;
 				                       }
 				
-				                       BOOL_Answer = machine.BOOL(fromBoxNum, toBoxNum, index);
-				                       if(BOOL_Answer == false) {
+				                       if(!machine.BOOL(fromBoxNum, toBoxNum, index)) {
 				                           i++; //Skip the next line if BOOL() returns false
 				                       }//End of if statement
 				                       break;
 				
 				                    case "CLEAR":
 				                        machine.CLEAR();
-				                       
+				                        break;
+				                        
 				                    case "CLEARPLACE":
 				                        String[] propertiesArray = userCodeArray[i].split(" ");
 				                         if(propertiesArray.length == 3) {
@@ -176,7 +175,27 @@ public class CodeCenter extends JFrame {
 				                             break;
 				                         }//End of if statement
 				                        
-				                        
+				                    case "INTERRUPT":
+				                    	machine.INTERRUPT(i);
+				                    	break;
+				                         
+				                    case "JUMP":
+				                    	String jumpLabel = attributes[1];
+				                    	int jumpNum = machine.JUMP(jumpLabel);
+				                    	if(jumpNum < 0) machine.crash(i+1, userCodeArray[i]);
+				                    	else i = jumpNum;
+				                    	break;
+				                         
+				                    case "LABEL":
+				                    	String label = attributes[1];
+				                    	if(!machine.LABEL(label, i)) machine.crash(i+1, userCodeArray[i]);
+				                    	break;
+				                    	
+				                    //Causes Intrigued Machine to crash after function
+				                    case "MEMDUMP":
+				                    	machine.MEMDUMP();
+				                    	break;
+				                    	
 				                    case "MOVE":
 				                            
 				                        int frmBoxNum;
@@ -289,15 +308,34 @@ public class CodeCenter extends JFrame {
 				                        	System.out.println("attributes list too long in TIME");
 				                            machine.crash(i+1, userCodeArray[i]);
 				                        } else {
-				                        	try {
-				                            extratime = Integer.parseInt(attributes[1]);
+				                        	try{
+				                        		extratime = Integer.parseInt(attributes[1]);
+				                        	
 				                        	} catch(NumberFormatException n)	{
-				                        		System.out.println("Error with number format in TIME");
 				                        		machine.crash(i+1, userCodeArray[i]);
 				                        	}
 				                            break;
 				                        }
+				                        
+				                    case "WAIT":
+				                    	try{
+				                    		int length = Integer.parseInt(attributes[1]);
+				                    		sleep(length);
+				                    		
+				                    	} catch(NumberFormatException | java.lang.ArrayIndexOutOfBoundsException | InterruptedException e) {
+				                    		machine.crash(i+1, userCodeArray[i]);
+				                    	}
+				                    	break;
 				                         
+				                    case "ZERO":
+				                    	try {
+				                    		int box = Integer.parseInt(attributes[1]);
+				                    		if(!machine.ZERO(box)) machine.crash(i+1, userCodeArray[i]);
+				                    	} catch(NumberFormatException | java.lang.ArrayIndexOutOfBoundsException e) {
+				                    		machine.crash(i+1, userCodeArray[i]);
+				                    	}
+				                    	break;
+				                    	
 				                    default:
 				                        System.out.println("Hit default!");
 				                        System.out.println("Current String to be parsed: " + userCodeArray[i]);
