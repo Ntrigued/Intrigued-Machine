@@ -2,8 +2,10 @@
 */
 package theintriguedproject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /*REMEMBERTODO
- * fix problem with CLEAR() function
  * check case 3 of OPERATE() function
  */
 
@@ -19,23 +21,35 @@ Leave commands not related to machine actions, such as GOTO and READ, to other c
 
 public class IntriguedMachine { 
     
-	java.util.Timer timer = new java.util.Timer();
+	java.util.Timer timer;
+	Map<String, Integer> labels;
+	
+	//label pointing to start of interrupt code
+	int interruptLabel;
 	
     //Create the matrix
-    int[][] boxMatrix = new int[6][6];
+    int[][] boxMatrix;
         
-    //Create the energy container and set the beginning level;
-    int energyContainer = 300;
+    //Create the energy container
+    int energyContainer;
+    
+    //Creates "reference" to OutputWindow
     OutputWindow output;
  
     //Used to track whether the Intrigued Machine has crashed
-    boolean crash = false;
+    boolean crash;
     
 //Create and set up the energy container.
 // Create the 6x6 matrix of boxes from boxMatrix and set each value to zero
 //Creates OutputWindow object
     public IntriguedMachine () {
-        
+    	timer = new java.util.Timer();
+    	labels = new HashMap<String, Integer>();
+    	interruptLabel = 0;
+    	boxMatrix = new int[6][6];
+    	energyContainer = 300;
+    	crash = false;
+    	
         for (int[] x : boxMatrix) {
             for (int y : x) {
                 y=0;
@@ -83,28 +97,40 @@ public class IntriguedMachine {
         
         
         switch (controlBoxEnergy) {
-            case 11:
-                if(boxMatrix[fromBox_x][fromBox_y] > 0) {
+            case 1:
+                if(boxMatrix[fromBox_x - 1][fromBox_y - 1] > 0) {
                     return true;
                 } else {
                     return false;
                 }// End of if statement
                 
-            case 13:
+            case 2:
                 if(index == 1) {
-                    if(boxMatrix[fromBox_x][fromBox_y] > boxMatrix[toBox_x][toBox_y]) {
+                    if(boxMatrix[fromBox_x - 1][fromBox_y - 1] > boxMatrix[toBox_x - 1][toBox_y - 1]) {
                         return true;
                     } else {
                         return false;
                     }// end of inner if statement
                 } else if(index == 2) {
-                    if(boxMatrix[fromBox_x][fromBox_y] == boxMatrix[toBox_x][toBox_y]) {
+                    if(boxMatrix[fromBox_x - 1][fromBox_y - 1] == boxMatrix[toBox_x - 1][toBox_y - 1]) {
                         return true;
                     } else {
                         return false;
                     }//End of inner if statement
                 }//End of outer if statement
                 
+            case 3:
+            	if(boxMatrix[fromBox_x - 1][fromBox_y - 1] > toBox) return true;
+            	else return false;
+
+            case 4:
+            	if(boxMatrix[fromBox_x - 1][fromBox_y - 1] < toBox) return true;
+            	else return false;
+            	
+            case 5:
+            	if(boxMatrix[fromBox_x - 1][fromBox_y - 1] == toBox) return true;
+            	else return false;
+            	
             default:
                 return false;
         }
@@ -122,6 +148,226 @@ public class IntriguedMachine {
     //Resets a specific coordinate on the screen to the space character 
     public void CLEARPLACE(int x_pos, int y_pos) {
         output.outputLines[x_pos][y_pos] = ' ';
+    }
+    
+    public boolean INTERRUPT(int place) {
+    	labels.put("INTERRUPT", place);
+    	return true;
+    }
+    
+    public int JUMP(String label) {
+    	if((labels.get(label) != null) && (labels.get(label) >= 0))
+    	{
+    		return labels.get(label);
+    	}
+    		return -1;
+    }
+    
+    public boolean LABEL(String label, int place){
+    	try {
+    	labels.put(label, place);
+    	return true;
+    	} catch(Exception e) {
+    		return false;
+    	}
+    }
+    
+    //TODO: re-write in more simulated way
+    //Prints value of each box in boxMatrix to OutputWindow
+    public void MEMDUMP()
+    {
+    	System.out.println("Boxmatrix.length: " + boxMatrix.length);
+    	System.out.println("Boxmatrix.length[1]: " + boxMatrix[1].length);
+    	
+    	char x_pos, y_pos, x_char, y_char;
+    	
+    	for(int x = 0; x < boxMatrix.length; x++ ) {
+
+    		System.out.println("x: " + x);
+    		switch(x+1) {
+			case 0:
+				x_pos = '0';
+				break;
+				
+			case 1:
+				x_pos = '1';
+				break;
+				
+			case 2:
+				x_pos = '2';
+				break;
+				
+			case 3:
+				x_pos = '3';
+				break;    				
+			case 4:
+				x_pos = '4';
+				break;    				
+			case 5:
+				x_pos = '5';
+				break;    				
+			case 6:
+				x_pos = '6';
+				break;    				
+			case 7:
+				x_pos = '7';
+				break;    				
+			case 8:
+				x_pos = '8';
+				break;
+				
+			case 9:
+				x_pos = '9';
+				break;
+				
+			default:
+				x_pos = 'E';
+			}
+    		System.out.println("x_pos: " + x_pos);
+    		
+    		
+    		for(int y = 0; y < boxMatrix[x].length; y++) {
+
+        	System.out.println("y: " + y);
+    		switch(y+1) {
+    			case 0:
+    				y_pos = '0';
+    				break;
+    				
+    			case 1:
+    				y_pos = '1';
+    				break;
+    				
+    			case 2:
+    				y_pos = '2';
+    				break;
+    				
+    			case 3:
+    				y_pos = '3';
+    				break;    				
+    			case 4:
+    				y_pos = '4';
+    				break;    				
+    			case 5:
+    				y_pos = '5';
+    				break;    				
+    			case 6:
+    				y_pos = '6';
+    				break;    				
+    			case 7:
+    				y_pos = '7';
+    				break;    				
+    			case 8:
+    				y_pos = '8';
+    				break;
+    				
+    			case 9:
+    				y_pos = '9';
+    				break;
+    				
+    			default:
+    				y_pos = 'E';
+    			}
+    			System.out.println("y_pos: " + y_pos);
+    		
+    			output.outputLines[x+3][10*y] = x_pos;    			
+    			output.outputLines[x+3][10*y+1] = y_pos;
+    			output.outputLines[x+3][10*y+2] = ':';
+    		    int x_value= (boxMatrix[x][y] - (boxMatrix[x][y] % 10)) / 10;
+    			int y_value = boxMatrix[x][y] % 10;
+    			
+    			switch(x_value) {
+    			case 0:
+    				x_char = '0';
+    				break;
+    				
+    			case 1:
+    				x_char = '1';
+    				break;
+    				
+    			case 2:
+    				x_char = '2';
+    				break;
+    				
+    			case 3:
+    				x_char = '3';
+    				break;    				
+    			case 4:
+    				x_char = '4';
+    				break;    				
+    			case 5:
+    				x_char = '5';
+    				break;    				
+    			case 6:
+    				x_char = '6';
+    				break;    				
+    			case 7:
+    				x_char = '7';
+    				break;    				
+    			case 8:
+    				x_char = '8';
+    				break;
+    				
+    			case 9:
+    				x_char = '9';
+    				break;
+    				
+    			default:
+    				x_char = 'E';
+    			}
+    			
+    		switch(y_value) {
+    			case 0:
+    				y_char = '0';
+    				break;
+    				
+    			case 1:
+    				y_char = '1';
+    				break;
+    				
+    			case 2:
+    				y_char = '2';
+    				break;
+    				
+    			case 3:
+    				y_char = '3';
+    				break;    				
+    			
+    			case 4:
+    				y_char = '4';
+    				break;    				
+    			
+    			case 5:
+    				y_char = '5';
+    				break;
+    				
+    			case 6:
+    				y_char = '6';
+    				break;
+    				
+    			case 7:
+    				y_char = '7';
+    				break;    	
+    				
+    			case 8:
+    				y_char = '8';
+    				break;
+    				
+    			case 9:
+    				y_char = '9';
+    				break;
+    				
+    			default:
+    				y_char = 'E';
+    			}
+    		
+    		output.outputLines[x+3][10*y+5] = x_char;
+    		output.outputLines[x+3][10*y+6] = y_char;
+    	    }
+    	}
+    	
+    	PRINT();
+    	crash(0, "crash from MEMDUMP");
     }
     
     //Moves 1 energy from fromBox to toBox, if they are touching and fromBox has 1 energy
@@ -260,6 +506,28 @@ public class IntriguedMachine {
         }//End of if statement
         return false;
     }//End of SET method
+    
+  //If the energy container has at least one energy remaining, take one energy and send it to borderBox
+    public boolean ZERO(int borderBox) {
+        int borderBox_x = (borderBox - (borderBox%10))/10;
+        int borderBox_y = borderBox % 10;
+        
+        System.out.println("borderBox: " + borderBox);
+        System.out.println("borderBox_x: " + borderBox_x);
+        System.out.println("borderBox_y: " + borderBox_y);
+        
+        if(borderBox_x == 1 || borderBox_x == 6) {
+            boxMatrix[borderBox_x-1][borderBox_y-1] = 0;
+            return true;
+
+        } else if(borderBox_y == 1 || borderBox_y == 6) {
+            boxMatrix[borderBox_x - 1][borderBox_y - 1] = 0;
+            return true;
+
+        } 
+        System.out.println("ZERO failed");
+        return false;
+    } //end of ZERO method
     
     //Runs when something causes the Intrigued Machine to crash
     //TODO: debugging features of crash() must be deleted from this and CodeCenter
