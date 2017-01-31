@@ -1,4 +1,4 @@
-# Intrigued-Machine
+# The Intrigued Machine and Language
 Simple programming language with a "unique" interpreter
 
 Implemented in Java, the "Intrigued" programming language is basically a BASIC-looking simple assembly-like language with a simple syntax and JUMP statements handling much of each program's logic. In fact, the language only has 12 commands: ADD, MOVE, BOOL, OPERATE, LABEL, JUMP, ZER0, SET, PRINT, CLEAR, CLEARALL, and MEMDUMP for debugging. These commands can be woven together in a number of ways to create a text-only output that will fill up a 100x100 character screen.
