@@ -1,4 +1,4 @@
-/* REMEMBERTODO IN THIS CLASS
+* REMEMBERTODO IN THIS CLASS
 call machine.crash() whenever a line is read that has a mistake in it
 all machine.crash calls need to be moved to the respective functions after debugging to maintain authenticity
 Implement machine.crash() for incorrect PRINT tributes[] array is created at the beginning of parsing each line
@@ -85,6 +85,7 @@ public class CodeCenter extends JFrame {
         //Parse each line
         new Thread() {
         	    	public void run() {
+        	    		int commandtime;
         	    		int extratime = 0;
 		    
 	    	    		for(int i = 0; i<userCodeArray.length; i++){
@@ -93,11 +94,16 @@ public class CodeCenter extends JFrame {
 				            	//Split off command name;
 				                String[] attributes = userCodeArray[i].trim().split(" ");
 				                String command = attributes[0];
+				                
+				                //Sets simulated length of time for each command.
+				                // Which is set to 0 for comments
+				                commandtime = 5;
+				                
 				                //Handle each command
-				
 				                switch (command){
 				                    //"#" will serve as comment symbol
 				                    case "#":
+				                    	commandtime = 0;
 				                        break;
 				
 				                    case "ADD":
@@ -347,7 +353,7 @@ public class CodeCenter extends JFrame {
         	    		
 	        	    		try {
 	        	    			System.out.println("sleep starting");
-								sleep(100 + extratime);
+								sleep(commandtime + extratime);
 								System.out.println("Sleep finished");
 							} catch (InterruptedException e) {
 								e.printStackTrace();
