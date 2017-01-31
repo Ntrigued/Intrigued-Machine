@@ -84,7 +84,7 @@ public class OutputWindow extends JFrame {
 
     }    
     //Create two-dimensional char array to represent the output screen
-    char[][] outputLines = new char[50][50];
+    char[][] outputLines = new char[100][100];
     
     //Constructor sets all bits to the space character
     public OutputWindow() {
@@ -118,7 +118,7 @@ public class OutputWindow extends JFrame {
           case 6:
               return '6';
           case 7:
-              return '6';
+              return '7';
           case 8:
               return '8';
           case 9:
