@@ -1,7 +1,7 @@
-# Adds to positive integers
+# Adds two positive integers
 #
 # #####INSTRUCTIONS#############
-# changes A to the first number
+# change A to the first number
 # and B to the second number
 # the result of A+B will be printed to the ouput
 # at position 20 20
@@ -28,7 +28,7 @@ LABEL loop2
 # zeroes out operate box
 	ZERO 11
 #
-# performs (box 65) = (box 65) + (box 65)
+# performs (box 65) = (box 65) + (box 64)
 	ADD 11
 	OPERATE 64 65
 #
