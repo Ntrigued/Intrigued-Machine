@@ -150,6 +150,17 @@ public class IntriguedMachine {
         output.outputLines[x_pos][y_pos] = ' ';
     }
     
+    //Pulls numeric code of character at specified position in screen memory and places corresponding # energy in box 66
+    public boolean GET(int x, int y) {
+    	int screenInt = output.reverseCodeList(output.outputLines[x - 1][y - 1]);
+    	ZERO(66);
+    	
+    	while(this.boxMatrix[5][5] != screenInt) ADD(66);
+
+    	return true;
+    }
+    
+    //Places label that program jumps to when an interrupt is triggered
     public boolean INTERRUPT(int place) {
     	labels.put("INTERRUPT", place);
     	return true;
@@ -401,7 +412,14 @@ public class IntriguedMachine {
     } //End of MOVE method
     
     public boolean OPERATE(int fromBox, int toBox, int x_pos, int y_pos, int index) {
-        //variables for altering values in boxMatrix
+    	System.out.println("fromBox: " + fromBox);
+    	System.out.println("toBox: " + toBox);
+    	System.out.println("x_pos: " + x_pos);
+    	System.out.println("y_pos: " + y_pos);        
+    	System.out.println("index: " + index);
+    	System.out.println("Control Box Energy: " + getOperateBoxEnergyValue());
+    	
+    	//variables for altering values in boxMatrix
         int fromBox_x = (fromBox - (fromBox % 10))/10;
         int fromBox_y = fromBox % 10;
         int toBox_x = (toBox - (toBox % 10))/10;
@@ -410,7 +428,7 @@ public class IntriguedMachine {
         
         switch(controlBoxEnergy) {
 
-            case 3:
+            case 1:
             //moves all of energy from fromBox to toBox
             	int fromBox_Energy = boxMatrix[fromBox_x - 1][fromBox_y - 1];
                 int toBox_Energy = boxMatrix[toBox_x - 1][toBox_y - 1];
@@ -419,7 +437,7 @@ public class IntriguedMachine {
                 return true;
                 
             //Has two indices
-            case 5:
+            case 2:
                 
                 //Prints the energy level of fromBox and then erases the number 
                 //from outputLines so it is not printed during the next printing of the screen
