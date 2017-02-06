@@ -1,4 +1,4 @@
-* REMEMBERTODO IN THIS CLASS
+/* REMEMBERTODO IN THIS CLASS
 call machine.crash() whenever a line is read that has a mistake in it
 all machine.crash calls need to be moved to the respective functions after debugging to maintain authenticity
 Implement machine.crash() for incorrect PRINT tributes[] array is created at the beginning of parsing each line
@@ -101,6 +101,9 @@ public class CodeCenter extends JFrame {
 				                
 				                //Handle each command
 				                switch (command){
+				                case "":
+				                	//Fall-through
+				                
 				                    //"#" will serve as comment symbol
 				                    case "#":
 				                    	commandtime = 0;
@@ -181,6 +184,17 @@ public class CodeCenter extends JFrame {
 				                             break;
 				                         }//End of if statement
 				                        
+				                    case "GET":
+					                    try {
+					                    	int GETx = Integer.parseInt(attributes[1]);
+					                    	int GETy = Integer.parseInt(attributes[2]);
+					                    
+					                    	machine.GET(GETx, GETy);
+					                    } catch(Exception e) {
+					                    	machine.crash(i+1, e.toString());
+					                    }
+					                    break;
+					                    
 				                    case "INTERRUPT":
 				                    	machine.INTERRUPT(i);
 				                    	break;
@@ -290,7 +304,7 @@ public class CodeCenter extends JFrame {
 				                        
 				                    case "SET":
 				                         if(attributes.length == 3) {
-				                             int x_; //Apparently variables must be declared
+				                             int x_; //Variables must be declared
 				                             int y_;// outside of try-catch
 				                        	 
 				                        	 try {
