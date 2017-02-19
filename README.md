@@ -14,4 +14,5 @@ In it's first release, the Intrigued Machine will not be able to deal with input
 Future implementations will likely include the ability to handle simple user input into a text box below the Intrigued Machine's screen. I also plan on implementing the ability to save and load .intr files so that programs can be stored easily from the editor.
 
 (You can see what a .intr file looks like in the Sample Programs folder)
+
 (Please note, I have just finished up a fairly major re-write on parts of how the machine works. There may be minor errors in this description, and sample programs may fail [I intend to fix this when I have time].)
