@@ -1,3 +1,5 @@
+### Note: this is pretty old and not something I still owrk on, but I had a lot of fun making it and can't bring myself to delete it. Feel free to have a look around
+
 # The Intrigued Machine and Language
 Simple programming language with a "unique" interpreter
 
